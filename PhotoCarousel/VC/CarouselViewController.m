@@ -8,6 +8,10 @@
 
 #import "CarouselViewController.h"
 #import "CarouselCVC.h"
+#import <AssetsLibrary/AssetsLibrary.h>
+
+#define heightRatioToScreenPortrait 6
+#define heightRatioToScreenLandscape 3
 
 @interface CarouselViewController()
 
@@ -29,7 +33,6 @@
     
     return _selectedImagesDict;
 }
-
 
 - (NSArray *) imageNameArray
 {
@@ -65,9 +68,19 @@
 {
     CarouselCVC *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ImageViewer" forIndexPath:indexPath];
     
-    NSString *imageLocalName = (NSString *)[self.imageNameArray objectAtIndex:[indexPath section]];
+    __block NSString *imageLocalName = (NSString *)[self.imageNameArray objectAtIndex:[indexPath section]];
 
-    cell.imageView.image = [UIImage imageNamed:imageLocalName];
+    //cell.imageView.image = [UIImage imageNamed:imageLocalName];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // retrive image on global queue
+        UIImage * img = [UIImage imageNamed:imageLocalName];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // assign cell image on main thread
+            cell.imageView.image = img;
+        });
+    });
+
     
     cell.photoSelectedView.imageSelected = [self.selectedImagesDict objectForKey:indexPath] != nil ? YES : NO;
     
@@ -81,7 +94,11 @@
     NSString *imageName = [self.imageNameArray objectAtIndex:[indexPath section]];
     UIImage *image = [UIImage imageNamed:imageName];
     
-    CGFloat height = self.view.bounds.size.height / 6;
+    CGFloat height;
+    if(self.view.bounds.size.height > self.view.bounds.size.width)
+        height = self.view.bounds.size.height / heightRatioToScreenPortrait;
+    else
+        height = self.view.bounds.size.height / heightRatioToScreenLandscape;
     CGFloat width = image.size.width * (height / image.size.height);
     
     return CGSizeMake(width, height);
@@ -107,7 +124,13 @@
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    CGFloat heightInset = self.view.bounds.size.height /6*5/2;
+    CGFloat heightInset;
+    
+    if(self.view.bounds.size.height > self.view.bounds.size.width)
+        heightInset = (self.view.bounds.size.height / 2) - ((self.view.bounds.size.height / heightRatioToScreenPortrait) / 2);
+    else
+        heightInset = (self.view.bounds.size.height / 2) - ((self.view.bounds.size.height / heightRatioToScreenLandscape) / 2);
+    
     CGFloat leftInset = (section == 0) ? 0 : 10;
     return UIEdgeInsetsMake(heightInset, leftInset, heightInset, 0);
 }
@@ -116,7 +139,7 @@
 
 - (void) updateUI
 {
-    self.navigationItem.title = [NSString stringWithFormat:@"%lu Photos Selected", [self.selectedImagesDict count]];
+    self.navigationItem.title = [NSString stringWithFormat:@"%lu Photos Selected", (unsigned long)[self.selectedImagesDict count]];
 }
 
 @end
