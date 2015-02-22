@@ -8,7 +8,7 @@
 
 #import "CarouselViewController.h"
 #import "CarouselCVC.h"
-#import <AssetsLibrary/AssetsLibrary.h>
+#import <Photos/Photos.h>
 
 #define heightRatioToScreenPortrait 6
 #define heightRatioToScreenLandscape 3
@@ -16,6 +16,7 @@
 @interface CarouselViewController()
 
 @property (nonatomic, strong) NSMutableDictionary *selectedImagesDict;
+@property (nonatomic, strong) NSMutableArray *assets;
 
 @end
 
@@ -34,13 +35,19 @@
     return _selectedImagesDict;
 }
 
-- (NSArray *) imageNameArray
+- (NSMutableArray *)assets
 {
-    if (_imageNameArray == nil) {
-        _imageNameArray = @[@"Image1", @"Image2", @"Image3", @"Image4", @"Image5", @"Image6", @"Image7", @"Image8", @"Image9", @"Image10"];
+    if (_assets == nil)
+    {
+        PHFetchResult *fetchResult = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:nil];
+        _assets = [[NSMutableArray alloc] init];
+        for(PHAsset *asset in fetchResult)
+        {
+            [_assets insertObject:asset atIndex:[_assets count]];
+        }
     }
     
-    return _imageNameArray;
+    return _assets;
 }
 
 #pragma mark - View handling
@@ -55,7 +62,7 @@
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return [self.imageNameArray count];
+    return self.assets.count;
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -66,21 +73,16 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    CarouselCVC *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ImageViewer" forIndexPath:indexPath];
+    NSString *reuseId = @"ImageViewer";
+    CarouselCVC *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseId forIndexPath:indexPath];
     
-    __block NSString *imageLocalName = (NSString *)[self.imageNameArray objectAtIndex:[indexPath section]];
-
-    //cell.imageView.image = [UIImage imageNamed:imageLocalName];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        // retrive image on global queue
-        UIImage * img = [UIImage imageNamed:imageLocalName];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            // assign cell image on main thread
-            cell.imageView.image = img;
-        });
-    });
-
+    PHImageRequestOptions *option = [PHImageRequestOptions new];
+    option.synchronous = YES;
+    
+    [[PHImageManager defaultManager] requestImageForAsset:[self.assets objectAtIndex:indexPath.section] targetSize:CGSizeMake(800, 600) contentMode:PHImageContentModeAspectFill options:option resultHandler:^(UIImage *result, NSDictionary *info)
+     {
+         cell.imageView.image = result;
+     }];
     
     cell.photoSelectedView.imageSelected = [self.selectedImagesDict objectForKey:indexPath] != nil ? YES : NO;
     
@@ -91,8 +93,15 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *imageName = [self.imageNameArray objectAtIndex:[indexPath section]];
-    UIImage *image = [UIImage imageNamed:imageName];
+    __block UIImage *image;
+
+    PHImageRequestOptions *option = [PHImageRequestOptions new];
+    option.synchronous = YES;
+    
+    [[PHImageManager defaultManager] requestImageForAsset:[self.assets objectAtIndex:indexPath.section] targetSize:CGSizeMake(800, 600) contentMode:PHImageContentModeAspectFill options:option resultHandler:^(UIImage *result, NSDictionary *info)
+     {
+         image = result;
+     }];
     
     CGFloat height;
     if(self.view.bounds.size.height > self.view.bounds.size.width)
@@ -106,7 +115,7 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.selectedImagesDict setObject:[self.imageNameArray objectAtIndex:indexPath.row] forKey:indexPath];
+    [self.selectedImagesDict setObject:[self.assets objectAtIndex:indexPath.section] forKey:indexPath];
     
     CarouselCVC *cell = (CarouselCVC *)[self.CarouselCollectionView cellForItemAtIndexPath:indexPath];
     cell.photoSelectedView.imageSelected = YES;
@@ -135,11 +144,30 @@
     return UIEdgeInsetsMake(heightInset, leftInset, heightInset, 0);
 }
 
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    CarouselCVC *CCell = (CarouselCVC *)cell;
+    
+    [CCell detirminePhotoSelectedViewPosition];
+}
+
 #pragma mark - UI Handling
 
 - (void) updateUI
 {
-    self.navigationItem.title = [NSString stringWithFormat:@"%lu Photos Selected", (unsigned long)[self.selectedImagesDict count]];
+    NSUInteger numberOfPhotosSelected = [self.selectedImagesDict count];
+    if (numberOfPhotosSelected == 0)
+    {
+        self.navigationItem.title = @"Select Items";
+    }
+    else if (numberOfPhotosSelected == 1)
+    {
+        self.navigationItem.title = @"1 Photo Selected";
+    }
+    else if (numberOfPhotosSelected > 1)
+    {
+        self.navigationItem.title = [NSString stringWithFormat:@"%lu Photos Selected", numberOfPhotosSelected];
+    }
 }
 
 @end

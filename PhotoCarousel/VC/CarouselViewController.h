@@ -11,6 +11,5 @@
 @interface CarouselViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *CarouselCollectionView;
-@property (strong, nonatomic) NSArray *imageNameArray;
 
 @end

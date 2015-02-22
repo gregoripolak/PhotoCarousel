@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A121DF51A9A8172001FDDD8 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A121DF41A9A8172001FDDD8 /* Photos.framework */; };
 		0AEC37BB1A977D1100BE255B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AEC37BA1A977D1100BE255B /* main.m */; };
 		0AEC37BE1A977D1100BE255B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AEC37BD1A977D1100BE255B /* AppDelegate.m */; };
 		0AEC37C41A977D1100BE255B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0AEC37C21A977D1100BE255B /* Main.storyboard */; };
@@ -29,6 +30,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A121DF41A9A8172001FDDD8 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		0AEC37B51A977D1100BE255B /* PhotoCarousel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoCarousel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AEC37B91A977D1100BE255B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0AEC37BA1A977D1100BE255B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -53,6 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A121DF51A9A8172001FDDD8 /* Photos.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,6 +72,7 @@
 		0AEC37AC1A977D1100BE255B = {
 			isa = PBXGroup;
 			children = (
+				0A121DF41A9A8172001FDDD8 /* Photos.framework */,
 				0AEC37B71A977D1100BE255B /* PhotoCarousel */,
 				0AEC37D11A977D1100BE255B /* PhotoCarouselTests */,
 				0AEC37B61A977D1100BE255B /* Products */,
@@ -441,6 +445,7 @@
 				0AEC37DA1A977D1100BE255B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0AEC37DB1A977D1100BE255B /* Build configuration list for PBXNativeTarget "PhotoCarouselTests" */ = {
 			isa = XCConfigurationList;
@@ -449,6 +454,7 @@
 				0AEC37DD1A977D1100BE255B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
