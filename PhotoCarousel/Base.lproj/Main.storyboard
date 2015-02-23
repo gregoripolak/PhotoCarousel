@@ -45,25 +45,16 @@
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HT5-Xs-gSy">
                                                     <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                                                 </imageView>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NiB-mQ-CxM" customClass="PhotoSelectedView">
-                                                    <rect key="frame" x="112" y="112" width="30" height="30"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="30" id="3o6-cr-FLe"/>
-                                                        <constraint firstAttribute="width" constant="30" id="vpI-hu-VTC"/>
-                                                    </constraints>
-                                                </view>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
                                             <constraint firstItem="VuX-fF-MsR" firstAttribute="leading" secondItem="gSa-x9-T1p" secondAttribute="leading" id="3bA-ro-6fC"/>
-                                            <constraint firstAttribute="bottom" secondItem="NiB-mQ-CxM" secondAttribute="bottom" constant="8" id="3dG-Tw-YCS"/>
                                             <constraint firstAttribute="trailing" secondItem="HT5-Xs-gSy" secondAttribute="trailing" id="4h6-QC-KBo"/>
                                             <constraint firstItem="VuX-fF-MsR" firstAttribute="top" secondItem="gSa-x9-T1p" secondAttribute="top" id="7RX-3H-2TF"/>
                                             <constraint firstItem="HT5-Xs-gSy" firstAttribute="top" secondItem="gSa-x9-T1p" secondAttribute="top" id="7VH-ro-Cda"/>
                                             <constraint firstAttribute="trailing" secondItem="HT5-Xs-gSy" secondAttribute="trailing" id="C58-e5-Bjb"/>
                                             <constraint firstAttribute="trailing" secondItem="VuX-fF-MsR" secondAttribute="trailing" id="KBX-bX-pW3"/>
-                                            <constraint firstAttribute="trailing" secondItem="NiB-mQ-CxM" secondAttribute="trailing" constant="8" id="N8e-KG-JJ3"/>
                                             <constraint firstItem="HT5-Xs-gSy" firstAttribute="leading" secondItem="gSa-x9-T1p" secondAttribute="leading" id="NxP-gt-QaB"/>
                                             <constraint firstAttribute="bottom" secondItem="HT5-Xs-gSy" secondAttribute="bottom" id="U7p-Kr-S2b"/>
                                             <constraint firstItem="HT5-Xs-gSy" firstAttribute="top" secondItem="gSa-x9-T1p" secondAttribute="top" id="Vgl-M9-U7l"/>
@@ -73,7 +64,6 @@
                                         </constraints>
                                         <connections>
                                             <outlet property="imageView" destination="HT5-Xs-gSy" id="lnc-S0-rDv"/>
-                                            <outlet property="photoSelectedView" destination="NiB-mQ-CxM" id="wlG-1K-4am"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>

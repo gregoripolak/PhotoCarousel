@@ -10,13 +10,23 @@
 #import "CarouselViewController.h"
 
 #define defaultSpacing 8
+#define selectedViewSize 30
 
 @implementation CarouselCVC
 
+- (PhotoSelectedView *)photoSelectedView
+{
+    if (_photoSelectedView == nil) {
+        _photoSelectedView = [[PhotoSelectedView alloc] initWithFrame:CGRectMake(self.frame.size.width - defaultSpacing - selectedViewSize, self.frame.size.height - defaultSpacing - selectedViewSize, selectedViewSize, selectedViewSize)];
+    }
+    
+    return _photoSelectedView;
+}
 
 - (void)didMoveToWindow
 {
     [self.superview addObserver:self forKeyPath:@"contentOffset" options:0 context:nil];
+    [self addSubview:self.photoSelectedView];
 }
 
 - (void)dealloc
@@ -31,6 +41,8 @@
         [self detirminePhotoSelectedViewPosition];
     }
 }
+
+
 
 - (void) detirminePhotoSelectedViewPosition
 {
@@ -58,7 +70,6 @@
     }
     self.photoSelectedView.frame = CGRectMake(newXPos, self.photoSelectedView.frame.origin.y,
                                               self.photoSelectedView.frame.size.width, self.photoSelectedView.frame.size.height);
-//    [self setNeedsDisplay];
 }
 
 @end

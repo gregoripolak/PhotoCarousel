@@ -17,26 +17,22 @@
 
 @implementation PhotoSelectedView
 
-- (instancetype)init
+- (instancetype)initWithFrame:(CGRect)frame
 {
-    self = [super init];
+    self = [super initWithFrame:frame];
     
-    if (self != nil)
-    {
+    if (self != nil) {
         _imageSelected = NO;
+        
+        self.layer.cornerRadius = self.bounds.size.width / 2;
+        self.layer.masksToBounds = YES;
+        self.layer.borderWidth = 1;
+        self.layer.borderColor = [UIColor whiteColor].CGColor;
+        
+        [self addSubview: self.label];
     }
     
     return self;
-}
-
-- (void)awakeFromNib
-{
-    self.layer.cornerRadius = self.bounds.size.width / 2;
-    self.layer.masksToBounds = YES;
-    self.layer.borderWidth = 1;
-    self.layer.borderColor = [UIColor whiteColor].CGColor;
-    
-    [self addSubview: self.label];
 }
 
 - (UILabel *)label
